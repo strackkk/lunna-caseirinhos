@@ -481,6 +481,7 @@ async function deleteProduct(product){
   }catch(error){
     showNotice("Não foi possível excluir o produto: " + error.message, "error");
   }
+}
 
   function getLocalOrders(){
     try{
@@ -629,7 +630,6 @@ async function deleteProduct(product){
     adminProducts = updated.map(mapProduct);
     renderProducts();
   }
-}
 
 function bootAdmin(){
   populateCategories();
