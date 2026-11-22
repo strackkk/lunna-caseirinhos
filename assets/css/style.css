@@ -240,6 +240,7 @@ footer{background:linear-gradient(135deg,#2A1815,#1d0f0f);color:rgba(255,248,240
 .qtd{display:flex;align-items:center;gap:8px;background:var(--branco);border-radius:50px;padding:4px;box-shadow:var(--sombra)}
 .qtd button{width:26px;height:26px;border-radius:50%;background:var(--creme-2);font-weight:700;color:var(--chocolate);font-size:1rem;display:flex;align-items:center;justify-content:center}
 .qtd button:hover{background:var(--rosa);color:#fff}
+.qtd button:disabled{background:#ddd2ce;color:#9e918d;cursor:not-allowed;opacity:.7}
 .qtd span{min-width:20px;text-align:center;font-weight:600;font-size:.9rem}
 .remove-item{color:var(--cinza);font-size:.75rem;margin-top:6px;text-decoration:underline}
 .remove-item:hover{color:var(--rosa)}

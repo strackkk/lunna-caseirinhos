@@ -221,6 +221,16 @@ function adicionarCarrinho(prod, sizeLabel, preco){
 }
 
 function atualizarCarrinho(){
+  carrinho = carrinho.filter(item => {
+    const produto = PRODUTOS.find(p => p.id == item.id);
+    if(!produto) return false;
+    if(produto.estoque == null) return true;
+    if(produto.estoque <= 0) return false;
+    item.qtd = Math.min(item.qtd, produto.estoque);
+    return item.qtd > 0;
+  });
+  salvarCarrinho();
+
   const totalItens = carrinho.reduce((s,i)=>s+i.qtd,0);
   $("cartCount").textContent = totalItens;
 
@@ -249,7 +259,15 @@ function atualizarCarrinho(){
         <div class="qtd">
           <button data-idx="${idx}" data-op="-">−</button>
           <span>${i.qtd}</span>
-          <button data-idx="${idx}" data-op="+">+</button>
+          <button data-idx="${idx}" data-op="+"
+            ${(() => {
+              const produto = PRODUTOS.find(p => p.id == i.id);
+              if(!produto || produto.estoque == null) return "";
+              const quantidadeAtual = carrinho
+                .filter(item => item.id == i.id)
+                .reduce((sum, item) => sum + item.qtd, 0);
+              return quantidadeAtual >= produto.estoque ? "disabled" : "";
+            })()}>+</button>
         </div>
       </div>`).join("");
 
