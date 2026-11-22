@@ -333,9 +333,24 @@
           <div class="ico">🎉</div>
           <h4>Quase lá! Envie seu comprovante</h4>
           <p>
-            Toque no botão abaixo para abrir nosso WhatsApp com seu pedido e nome já preenchidos.
-            Lá dentro, é só <b>anexar a imagem do comprovante do PIX</b> e enviar. Confirmamos seu pedido em minutos!
+            Selecione o comprovante do PIX e toque no botão para enviar o pedido.
           </p>
+          <label class="comprovante-upload" for="comprovantePix">
+            <span class="comprovante-upload-icon">📎</span>
+            <span>
+              <b>Selecionar comprovante</b>
+              <small>Imagem ou PDF, até 10 MB</small>
+            </span>
+          </label>
+          <input id="comprovantePix" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden>
+          <div class="comprovante-preview" id="comprovantePreview" hidden>
+            <img id="comprovanteImagem" alt="Prévia do comprovante" hidden>
+            <span id="comprovanteNome"></span>
+            <button type="button" id="removerComprovante" aria-label="Remover comprovante">Remover</button>
+          </div>
+          <div class="aviso" id="comprovanteAviso">
+            Em celulares compatíveis, o comprovante será anexado automaticamente. No computador, o WhatsApp abrirá com os dados do pedido para você anexar o comprovante manualmente.
+          </div>
           <button class="btn btn-wpp" id="enviarWpp"
                   style="width:100%;justify-content:center;padding:16px;font-size:1rem">
             📲 Enviar comprovante no WhatsApp

@@ -417,7 +417,52 @@ $("copiarPix").onclick = () => {
 
 $("irEtapa3").onclick = () => mostrarEtapa(3);
 
-$("enviarWpp").onclick = () => {
+let comprovantePix = null;
+
+function limparComprovante(){
+  comprovantePix = null;
+  $("comprovantePix").value = "";
+  $("comprovantePreview").hidden = true;
+  $("comprovanteImagem").hidden = true;
+  $("comprovanteImagem").removeAttribute("src");
+  $("comprovanteNome").textContent = "";
+  $("comprovanteAviso").classList.remove("aviso-erro");
+}
+
+$("comprovantePix").addEventListener("change", () => {
+  const file = $("comprovantePix").files[0];
+  if(!file) return;
+  const tiposPermitidos = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+  if(!tiposPermitidos.includes(file.type)){
+    limparComprovante();
+    toast("⚠️ Selecione uma imagem JPG, PNG, WebP ou PDF.");
+    return;
+  }
+  if(file.size > 10 * 1024 * 1024){
+    limparComprovante();
+    toast("⚠️ O comprovante deve ter no máximo 10 MB.");
+    return;
+  }
+  comprovantePix = file;
+  $("comprovanteNome").textContent = file.name;
+  $("comprovantePreview").hidden = false;
+  if(file.type.startsWith("image/")){
+    $("comprovanteImagem").src = URL.createObjectURL(file);
+    $("comprovanteImagem").hidden = false;
+  }else{
+    $("comprovanteImagem").hidden = true;
+  }
+});
+
+$("removerComprovante").addEventListener("click", limparComprovante);
+
+$("enviarWpp").onclick = async () => {
+  if(!comprovantePix){
+    toast("⚠️ Selecione o comprovante do PIX antes de enviar.");
+    $("comprovantePix").focus();
+    return;
+  }
+
   const nome = $("cliNome").value.trim() || "Cliente";
   const tel = $("cliTel").value.trim();
   const data = $("cliData").value;
@@ -436,14 +481,37 @@ $("enviarWpp").onclick = () => {
   });
   msg += `\n💰 *TOTAL PAGO VIA PIX:* ${fmt(total)}\n`;
   if(obs) msg += `\n📝 *Observações:* ${obs}\n`;
-  msg += `\n📎 *Anexo:* comprovante do PIX em anexo.\n\nAguardo confirmação! Obrigada 💗`;
+  msg += `\n📎 *Comprovante:* anexado junto a esta mensagem.\n\nAguardo confirmação! Obrigada 💗`;
 
-  window.open(wppLink(msg), "_blank");
-  // limpa carrinho após envio
+  let shared = false;
+  if(navigator.canShare && navigator.share){
+    try{
+      const shareData = {title: "Comprovante PIX - " + nome, text: msg, files: [comprovantePix]};
+      if(navigator.canShare(shareData)){
+        await navigator.share(shareData);
+        shared = true;
+      }
+    }catch(error){
+      if(error.name === "AbortError"){
+        toast("Envio cancelado. Seu pedido continua no carrinho.");
+        return;
+      }
+    }
+  }
+
+  if(!shared){
+    const fallbackMsg = msg.replace(
+      "📎 *Comprovante:* anexado junto a esta mensagem.",
+      "📎 *Comprovante:* anexarei o comprovante selecionado nesta conversa."
+    );
+    window.open(wppLink(fallbackMsg), "_blank");
+  }
+
   carrinho = [];
   salvarCarrinho();
   atualizarCarrinho();
-  toast("🎉 Pedido enviado! Anexe o comprovante no WhatsApp.");
+  limparComprovante();
+  toast(shared ? "🎉 Comprovante enviado!" : "🎉 Pedido aberto no WhatsApp. Anexe o comprovante selecionado.");
   setTimeout(()=>{
     $("checkoutModal").classList.remove("aberto");
     travarScroll(false);

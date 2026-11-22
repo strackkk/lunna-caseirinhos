@@ -303,6 +303,15 @@ footer{background:linear-gradient(135deg,#2A1815,#1d0f0f);color:rgba(255,248,240
 .sucesso-box .ico{font-size:4rem;margin-bottom:16px}
 .sucesso-box h4{font-size:1.3rem;margin-bottom:10px}
 .sucesso-box p{font-size:.9rem;color:var(--cinza);margin-bottom:20px}
+.comprovante-upload{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;margin:0 0 12px;border:2px dashed rgba(194,24,91,.35);border-radius:14px;background:#fff;cursor:pointer;text-align:left}
+.comprovante-upload:hover{border-color:var(--rosa);background:#fff8fa}
+.comprovante-upload-icon{font-size:1.8rem}
+.comprovante-upload b,.comprovante-upload small{display:block}
+.comprovante-upload small{color:var(--cinza);margin-top:2px}
+.comprovante-preview{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;margin:0 0 12px;border:1px solid rgba(62,39,35,.12);border-radius:12px;background:#fff;text-align:left}
+.comprovante-preview img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+.comprovante-preview span{font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.comprovante-preview button{color:var(--rosa);font-size:.78rem;font-weight:600}
 
 /* ===== TOAST ===== */
 .toast{
