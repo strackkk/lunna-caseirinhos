@@ -558,6 +558,11 @@ async function deleteProduct(product){
       value.textContent = "R$ " + Number(order.total || 0).toFixed(2).replace(".", ",");
       const actions = document.createElement("div");
       actions.className = "admin-order-actions";
+        const print = document.createElement("button");
+        print.type = "button";
+        print.textContent = "Imprimir";
+        print.addEventListener("click", () => printOrder(order));
+        actions.append(print);
       if(order.status !== "confirmado"){
         const confirm = document.createElement("button");
         confirm.type = "button";
@@ -630,6 +635,49 @@ async function deleteProduct(product){
     adminProducts = updated.map(mapProduct);
     renderProducts();
   }
+
+function printOrder(order){
+  const escapeText = value => String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  const items = (order.items || []).map(item =>
+    `<tr><td>${escapeText(item.quantity)}x ${escapeText(item.name)}${item.size ? " " + escapeText(item.size) : ""}</td><td>${"R$ " + (Number(item.quantity || 0) * Number(item.unitPrice || 0)).toFixed(2).replace(".", ",")}</td></tr>`
+  ).join("");
+  const printWindow = window.open("", "_blank", "width=420,height=700");
+  if(!printWindow){
+    showNotice("Permita pop-ups para imprimir o pedido.", "error");
+    return;
+  }
+  printWindow.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Pedido ${escapeText(order.id)}</title><style>
+    body{font-family:Arial,sans-serif;width:80mm;margin:0 auto;padding:10mm 4mm;color:#111}
+    h1{font-size:18px;text-align:center;margin:0 0 6px}
+    p{margin:4px 0;font-size:12px}
+    table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+    td{padding:5px 0;border-bottom:1px dashed #777}
+    td:last-child{text-align:right;white-space:nowrap}
+    .total{font-size:16px;font-weight:bold;text-align:right;margin-top:10px}
+    @media print{body{width:72mm}}
+  </style></head><body>
+    <h1>${escapeText(CONFIG.nomeLoja)}</h1>
+    <p><strong>Pedido:</strong> ${escapeText(order.id)}</p>
+    <p><strong>Cliente:</strong> ${escapeText(order.customerName)}</p>
+    <p><strong>Telefone:</strong> ${escapeText(order.phone)}</p>
+    <p><strong>Entrega:</strong> ${order.deliveryType === "entrega" ? "Entrega em casa" : "Retirada"}</p>
+    ${order.address ? `<p><strong>Endereço:</strong> ${escapeText(order.address)}</p>` : ""}
+    ${order.eventDate ? `<p><strong>Data:</strong> ${escapeText(order.eventDate.split("-").reverse().join("/"))}</p>` : ""}
+    <table>${items}</table>
+    <p>Subtotal: R$ ${Number(order.subtotal || 0).toFixed(2).replace(".", ",")}</p>
+    <p>Entrega: R$ ${Number(order.deliveryFee || 0).toFixed(2).replace(".", ",")}</p>
+    ${Number(order.discount || 0) > 0 ? `<p>Desconto PIX: -R$ ${Number(order.discount).toFixed(2).replace(".", ",")}</p>` : ""}
+    <p class="total">TOTAL: R$ ${Number(order.total || 0).toFixed(2).replace(".", ",")}</p>
+    ${order.observations ? `<p><strong>Obs:</strong> ${escapeText(order.observations)}</p>` : ""}
+    <p style="text-align:center;margin-top:16px">Obrigado pela preferência!</p>
+  </body></html>`);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.onload = () => printWindow.print();
+}
 
 function bootAdmin(){
   populateCategories();
