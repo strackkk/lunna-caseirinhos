@@ -650,16 +650,21 @@ function printOrder(order){
     return;
   }
   printWindow.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Pedido ${escapeText(order.id)}</title><style>
-    body{font-family:Arial,sans-serif;width:80mm;margin:0 auto;padding:10mm 4mm;color:#111}
-    h1{font-size:18px;text-align:center;margin:0 0 6px}
-    p{margin:4px 0;font-size:12px}
-    table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
-    td{padding:5px 0;border-bottom:1px dashed #777}
+    @page{size:80mm auto;margin:0}
+    *{box-sizing:border-box}
+    body{font-family:"Courier New",monospace;width:80mm;margin:0;padding:4mm 3mm;color:#111;font-size:11px;line-height:1.25}
+    h1{font-size:16px;text-align:center;margin:0 0 5px;font-weight:bold}
+    p{margin:3px 0;font-size:11px}
+    table{width:100%;border-collapse:collapse;margin:7px 0;font-size:11px}
+    td{padding:4px 0;border-bottom:1px dashed #777;vertical-align:top}
     td:last-child{text-align:right;white-space:nowrap}
-    .total{font-size:16px;font-weight:bold;text-align:right;margin-top:10px}
-    @media print{body{width:72mm}}
+    .total{font-size:15px;font-weight:bold;text-align:right;margin-top:8px;border-top:2px solid #111;padding-top:7px}
+    .center{text-align:center}
+    .divider{border-top:1px dashed #111;margin:6px 0}
+    @media print{html,body{width:80mm}body{padding:4mm 3mm}}
   </style></head><body>
     <h1>${escapeText(CONFIG.nomeLoja)}</h1>
+    <div class="divider"></div>
     <p><strong>Pedido:</strong> ${escapeText(order.id)}</p>
     <p><strong>Cliente:</strong> ${escapeText(order.customerName)}</p>
     <p><strong>Telefone:</strong> ${escapeText(order.phone)}</p>
