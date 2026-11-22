@@ -195,6 +195,7 @@ async function loadProducts(){
     sort_order: index,
   }));
   adminProducts = (savedProducts || initialProducts).map(mapProduct);
+  updateOverview();
   renderProducts();
 }
 
