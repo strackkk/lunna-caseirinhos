@@ -63,10 +63,10 @@
       </section>
 
       <nav class="admin-tabs" aria-label="Seções do painel">
-        <button type="button" class="admin-tab ativo" data-section="storeSection">Loja e PIX</button>
-        <button type="button" class="admin-tab" data-section="bannerSection">Banner</button>
-        <button type="button" class="admin-tab" data-section="productsSection">Produtos</button>
-        <button type="button" class="admin-tab" data-section="ordersSection">Pedidos</button>
+        <button type="button" class="admin-tab ativo" data-section="storeSection" onclick="document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('ativo')});this.classList.add('ativo');document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('storeSection').classList.add('active')">Loja e PIX</button>
+        <button type="button" class="admin-tab" data-section="bannerSection" onclick="document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('ativo')});this.classList.add('ativo');document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('bannerSection').classList.add('active')">Banner</button>
+        <button type="button" class="admin-tab" data-section="productsSection" onclick="document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('ativo')});this.classList.add('ativo');document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('productsSection').classList.add('active')">Produtos</button>
+        <button type="button" class="admin-tab" data-section="ordersSection" onclick="document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('ativo')});this.classList.add('ativo');document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('ordersSection').classList.add('active')">Pedidos</button>
       </nav>
 
       <section class="admin-card admin-section active" id="storeSection">
