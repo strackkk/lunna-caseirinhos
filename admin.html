@@ -48,6 +48,18 @@
           <span class="admin-stat-icon">🏷️</span>
           <div><strong id="adminCategoryCount">0</strong><small>Categorias disponíveis</small></div>
         </article>
+        <article class="admin-stat">
+          <span class="admin-stat-icon">📦</span>
+          <div><strong id="adminStockCount">0</strong><small>Unidades em estoque</small></div>
+        </article>
+        <article class="admin-stat">
+          <span class="admin-stat-icon">🛍️</span>
+          <div><strong id="adminSoldCount">0</strong><small>Itens vendidos</small></div>
+        </article>
+        <article class="admin-stat">
+          <span class="admin-stat-icon">💰</span>
+          <div><strong id="adminRevenue">R$ 0,00</strong><small>Total de vendas</small></div>
+        </article>
       </section>
 
       <nav class="admin-tabs" aria-label="Seções do painel">
@@ -175,6 +187,8 @@
           </div>
           <label for="productPrice">Preço unitário (R$), para produto sem tamanhos</label>
           <input id="productPrice" type="number" min="0.01" step="0.01">
+          <label for="productStock">Estoque disponível (vazio = estoque ilimitado)</label>
+          <input id="productStock" type="number" min="0" step="1" placeholder="Ex: 20">
           <label for="productSizes">Tamanhos (uma opção por linha: tamanho | preço | rendimento)</label>
           <textarea id="productSizes" rows="4" placeholder="P | 89,90 | ~10 fatias&#10;M | 139,90 | ~20 fatias"></textarea>
           <div class="form-actions">

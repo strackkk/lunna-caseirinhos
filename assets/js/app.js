@@ -118,6 +118,10 @@ function renderProdutos(){
   }
   $("produtos").innerHTML = lista.map(p => {
     const precoInicial = p.sizes ? p.sizes[0].p : p.preco;
+    const semEstoque = p.estoque != null && p.estoque <= 0;
+    const estoqueHtml = p.estoque != null
+      ? `<small class="${p.estoque <= 5 ? 'estoque-baixo' : ''}">${semEstoque ? 'Esgotado' : p.estoque + ' em estoque'}</small>`
+      : "";
     const sizesHtml = p.sizes ? `<div class="size-picker" data-prod="${p.id}">
       ${p.sizes.map((s,i)=>`<div class="size-opt ${i===0?'ativo':''}" data-idx="${i}">
         <small>${escHtml(s.l)} · ${escHtml(s.s)}</small><b>${fmt(s.p)}</b>
@@ -142,8 +146,9 @@ function renderProdutos(){
           <div class="prod-preco">
             <b class="preco-${p.id}">${fmt(precoInicial)}</b>
             <small>${p.sizes?'a partir de':'preço unitário'}</small>
+            ${estoqueHtml}
           </div>
-          <button class="add-btn" data-id="${p.id}">+ Adicionar</button>
+          <button class="add-btn" data-id="${p.id}" ${semEstoque?'disabled':''}>${semEstoque?'Esgotado':'+ Adicionar'}</button>
         </div>
       </div>
     </div>`;
@@ -187,6 +192,15 @@ function salvarCarrinho(){
 function adicionarCarrinho(prod, sizeLabel, preco){
   const chave = prod.id + "|" + sizeLabel;
   const existente = carrinho.find(i => i.chave===chave);
+  if(prod.estoque != null){
+    const quantidadeAtual = carrinho
+      .filter(item => item.id == prod.id)
+      .reduce((sum, item) => sum + item.qtd, 0);
+    if(quantidadeAtual >= prod.estoque){
+      toast("⚠️ Estoque indisponível para este produto.");
+      return;
+    }
+  }
   if(existente){ existente.qtd++; }
   else {
     carrinho.push({
@@ -247,7 +261,17 @@ function atualizarCarrinho(){
 
     document.querySelectorAll(".qtd button").forEach(b => b.onclick = () => {
       const idx = +b.dataset.idx;
-      if(b.dataset.op==="+") carrinho[idx].qtd++;
+      if(b.dataset.op==="+"){
+        const product = PRODUTOS.find(item => item.id == carrinho[idx].id);
+        const quantidadeAtual = carrinho
+          .filter(item => item.id == carrinho[idx].id)
+          .reduce((sum, item) => sum + item.qtd, 0);
+        if(product && product.estoque != null && quantidadeAtual >= product.estoque){
+          toast("⚠️ Você atingiu o estoque disponível.");
+          return;
+        }
+        carrinho[idx].qtd++;
+      }
       else {
         carrinho[idx].qtd--;
         if(carrinho[idx].qtd<=0) carrinho.splice(idx,1);
@@ -524,6 +548,52 @@ $("enviarWpp").onclick = async () => {
     window.open(wppLink(fallbackMsg), "_blank");
   }
 
+  try{
+    const savedOrders = JSON.parse(localStorage.getItem("lunna-local-orders-v1") || "[]");
+    const orders = Array.isArray(savedOrders) ? savedOrders : [];
+    orders.unshift({
+      id: pedidoId,
+      createdAt: now.toISOString(),
+      customerName: nome,
+      phone: tel,
+      deliveryType: tipoEntrega,
+      address: tipoEntrega === "entrega" ? endereco : "",
+      eventDate: data,
+      observations: obs,
+      items: carrinho.map(item => ({
+        productId: item.id,
+        name: item.nome,
+        size: item.sizeLabel || "",
+        quantity: item.qtd,
+        unitPrice: item.preco,
+      })),
+      subtotal,
+      deliveryFee: taxa,
+      discount: subtotal + taxa - total,
+      total,
+      status: "pendente",
+    });
+    localStorage.setItem("lunna-local-orders-v1", JSON.stringify(orders.slice(0, 500)));
+
+    const savedProducts = JSON.parse(localStorage.getItem("lunna-local-products-v1") || "null");
+    if(Array.isArray(savedProducts)){
+      const quantityByProduct = {};
+      carrinho.forEach(item => {
+        quantityByProduct[item.id] = (quantityByProduct[item.id] || 0) + item.qtd;
+      });
+      const updatedProducts = savedProducts.map(product => {
+        const quantity = quantityByProduct[product.id] || 0;
+        if(quantity > 0 && product.stock != null){
+          return {...product, stock: Math.max(0, Number(product.stock) - quantity)};
+        }
+        return product;
+      });
+      localStorage.setItem("lunna-local-products-v1", JSON.stringify(updatedProducts));
+    }
+  }catch(error){
+    console.error("Não foi possível registrar o pedido localmente.", error);
+  }
+
   carrinho = [];
   salvarCarrinho();
   atualizarCarrinho();
@@ -591,6 +661,7 @@ function carregarConteudoLocal(){
         tag: product.tag,
         sizes: product.sizes,
         preco: product.price,
+        estoque: product.stock,
       }));
     }
 

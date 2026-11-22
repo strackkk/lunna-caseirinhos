@@ -162,6 +162,8 @@ section{padding:80px 0}
   font-weight:600;font-size:.85rem;display:inline-flex;align-items:center;gap:6px;transition:all .2s;box-shadow:0 8px 18px rgba(62,39,35,.12);
 }
 .add-btn:hover{background:linear-gradient(135deg,var(--rosa),var(--rosa-2));transform:scale(1.05)}
+.add-btn:disabled{background:#c7bdb8;cursor:not-allowed;transform:none;box-shadow:none}
+.estoque-baixo{color:#b83a3a!important;font-weight:700}
 
 /* ===== COMO FUNCIONA ===== */
 .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}

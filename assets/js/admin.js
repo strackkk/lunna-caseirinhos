@@ -92,6 +92,7 @@ function mapProduct(product){
     tag: product.tag || "",
     sizes: product.sizes || null,
     price: product.price,
+    stock: product.stock != null ? Number(product.stock) : null,
     is_active: product.is_active,
     sort_order: product.sort_order,
   };
@@ -147,7 +148,14 @@ function renderProducts(){
     const name = document.createElement("h3");
     name.textContent = product.name;
     const description = document.createElement("p");
-    description.textContent = productPrice(product) + (product.is_active ? "" : " · Oculto");
+    const stockText = product.stock == null
+      ? "Estoque ilimitado"
+      : product.stock <= 5
+        ? `Estoque baixo: ${product.stock}`
+        : `Estoque: ${product.stock}`;
+    description.textContent =
+      productPrice(product) + " · " + stockText +
+      (product.is_active ? "" : " · Oculto");
     details.append(name, description);
 
     const actions = document.createElement("div");
@@ -173,10 +181,28 @@ function renderProducts(){
 
 function updateOverview(){
   const activeCount = adminProducts.filter(product => product.is_active).length;
+  const stockCount = adminProducts.reduce((sum, product) =>
+    sum + (product.stock != null ? Number(product.stock) : 0), 0);
+  let orders = [];
+  try{
+    orders = readLocalValue("lunna-local-orders-v1", []);
+    if(!Array.isArray(orders)) orders = [];
+  }catch{
+    orders = [];
+  }
+  const soldCount = orders.reduce((sum, order) =>
+    sum + (Array.isArray(order.items)
+      ? order.items.reduce((itemSum, item) => itemSum + Number(item.quantity || 0), 0)
+      : 0), 0);
+  const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
   if(admin$("adminProductCount")) admin$("adminProductCount").textContent = adminProducts.length;
   if(admin$("adminActiveCount")) admin$("adminActiveCount").textContent = activeCount;
   if(admin$("adminCategoryCount")) admin$("adminCategoryCount").textContent =
     CATEGORIAS.filter(category => category.id !== "todos").length;
+  if(admin$("adminStockCount")) admin$("adminStockCount").textContent = stockCount;
+  if(admin$("adminSoldCount")) admin$("adminSoldCount").textContent = soldCount;
+  if(admin$("adminRevenue")) admin$("adminRevenue").textContent =
+    "R$ " + revenue.toFixed(2).replace(".", ",");
 }
 
 async function loadProducts(){
@@ -191,6 +217,7 @@ async function loadProducts(){
     tag: product.tag || "",
     sizes: product.sizes || null,
     price: product.sizes ? null : product.preco,
+    stock: null,
     is_active: true,
     sort_order: index,
   }));
@@ -322,6 +349,7 @@ function openProductEditor(product){
   savedProductImageUrl = product ? product.image_url : "";
   admin$("productImageUrl").value = savedProductImageUrl.startsWith("data:") ? "" : savedProductImageUrl;
   admin$("productPrice").value = product && product.price != null ? product.price : "";
+  admin$("productStock").value = product && product.stock != null ? product.stock : "";
   admin$("productSizes").value = product && product.sizes
     ? product.sizes.map(size => `${size.l} | ${Number(size.p).toFixed(2).replace(".", ",")} | ${size.s}`).join("\n")
     : "";
@@ -382,6 +410,11 @@ async function saveProduct(event){
   try{
     const sizes = parseSizes(admin$("productSizes").value);
     const priceValue = admin$("productPrice").value;
+    const stockValue = admin$("productStock").value;
+    const stock = stockValue === "" ? null : Number(stockValue);
+    if(stock != null && (!Number.isInteger(stock) || stock < 0)){
+      throw new Error("O estoque deve ser um número inteiro igual ou maior que zero.");
+    }
     if(!sizes && (!priceValue || Number(priceValue) <= 0)){
       throw new Error("Informe um preço maior que zero ou preencha os tamanhos.");
     }
@@ -402,6 +435,7 @@ async function saveProduct(event){
       image_url: uploadedImage || checkedImageUrl(admin$("productImageUrl").value) || savedProductImageUrl || null,
       sizes,
       price: sizes ? null : Number(priceValue),
+      stock,
       is_active: existingProduct ? existingProduct.is_active : true,
       sort_order: existingProduct ? existingProduct.sort_order : adminProducts.length,
     };
