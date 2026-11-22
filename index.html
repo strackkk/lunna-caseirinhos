@@ -321,9 +321,22 @@
         <div class="aviso">
           ⚠️ Após pagar, clique em "Já paguei" e envie o comprovante pelo WhatsApp. Seu pedido só é confirmado após o envio do comprovante. Prazo mínimo de encomenda: 48h.
         </div>
+        <label class="comprovante-upload" for="comprovantePix">
+          <span class="comprovante-upload-icon">📎</span>
+          <span>
+            <b>Selecionar comprovante do PIX</b>
+            <small>Imagem ou PDF, até 10 MB</small>
+          </span>
+        </label>
+        <input id="comprovantePix" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden>
+        <div class="comprovante-preview" id="comprovantePreview" hidden>
+          <img id="comprovanteImagem" alt="Prévia do comprovante" hidden>
+          <span id="comprovanteNome"></span>
+          <button type="button" id="removerComprovante" aria-label="Remover comprovante">Remover</button>
+        </div>
         <div class="modal-actions">
           <button class="btn btn-ghost" id="voltarEtapa1">← Voltar</button>
-          <button class="btn btn-wpp" id="irEtapa3">✓ Já paguei, enviar comprovante</button>
+          <button class="btn btn-wpp" id="irEtapa3">📲 Enviar pedido no WhatsApp</button>
         </div>
       </div>
 
@@ -331,33 +344,11 @@
       <div class="etapa" id="etapa3">
         <div class="sucesso-box">
           <div class="ico">🎉</div>
-          <h4>Quase lá! Envie seu comprovante</h4>
-          <p>
-            Selecione o comprovante do PIX e toque no botão para enviar o pedido.
-          </p>
-          <label class="comprovante-upload" for="comprovantePix">
-            <span class="comprovante-upload-icon">📎</span>
-            <span>
-              <b>Selecionar comprovante</b>
-              <small>Imagem ou PDF, até 10 MB</small>
-            </span>
-          </label>
-          <input id="comprovantePix" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden>
-          <div class="comprovante-preview" id="comprovantePreview" hidden>
-            <img id="comprovanteImagem" alt="Prévia do comprovante" hidden>
-            <span id="comprovanteNome"></span>
-            <button type="button" id="removerComprovante" aria-label="Remover comprovante">Remover</button>
-          </div>
-          <div class="aviso" id="comprovanteAviso">
-            Em celulares compatíveis, o comprovante será anexado automaticamente. No computador, o WhatsApp abrirá com os dados do pedido para você anexar o comprovante manualmente.
-          </div>
+          <h4>Pedido pronto para envio</h4>
+          <p>Use o botão abaixo para voltar ao PIX e enviar o pedido diretamente.</p>
           <button class="btn btn-wpp" id="enviarWpp"
                   style="width:100%;justify-content:center;padding:16px;font-size:1rem">
-            📲 Enviar comprovante no WhatsApp
-          </button>
-          <button class="btn btn-ghost" id="fecharModal"
-                  style="width:100%;justify-content:center;margin-top:10px">
-            Continuar comprando
+            📲 Enviar no WhatsApp
           </button>
         </div>
       </div>

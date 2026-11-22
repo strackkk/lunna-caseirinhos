@@ -296,10 +296,12 @@ $("modalClose").onclick = () => {
   $("checkoutModal").classList.remove("aberto");
   travarScroll(false);
 };
-$("fecharModal").onclick = () => {
-  $("checkoutModal").classList.remove("aberto");
-  travarScroll(false);
-};
+if($("fecharModal")){
+  $("fecharModal").onclick = () => {
+    $("checkoutModal").classList.remove("aberto");
+    travarScroll(false);
+  };
+}
 $("voltarCarrinho").onclick = () => {
   $("checkoutModal").classList.remove("aberto");
   travarScroll(false);
@@ -415,7 +417,7 @@ $("copiarPix").onclick = () => {
   );
 };
 
-$("irEtapa3").onclick = () => mostrarEtapa(3);
+$("irEtapa3").onclick = () => $("enviarWpp").click();
 
 let comprovantePix = null;
 
