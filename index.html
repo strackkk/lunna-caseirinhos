@@ -252,7 +252,6 @@
       <div class="etapa-indicador">
         <div class="etapa-dot ativo" id="dot1"></div>
         <div class="etapa-dot" id="dot2"></div>
-        <div class="etapa-dot" id="dot3"></div>
       </div>
 
       <!-- ETAPA 1: Dados -->
@@ -264,7 +263,7 @@
         </div>
         <div class="campo">
           <label for="cliTel">Telefone / WhatsApp *</label>
-          <input type="tel" id="cliTel" placeholder="(11) 99999-9999">
+          <input type="tel" id="cliTel" inputmode="tel" maxlength="15" placeholder="(11) 99999-9999">
         </div>
         <div class="campo">
           <label for="cliData">Data do evento / retirada</label>
@@ -336,20 +335,7 @@
         </div>
         <div class="modal-actions">
           <button class="btn btn-ghost" id="voltarEtapa1">← Voltar</button>
-          <button class="btn btn-wpp" id="irEtapa3">📲 Enviar pedido no WhatsApp</button>
-        </div>
-      </div>
-
-      <!-- ETAPA 3: Envio comprovante -->
-      <div class="etapa" id="etapa3">
-        <div class="sucesso-box">
-          <div class="ico">🎉</div>
-          <h4>Pedido pronto para envio</h4>
-          <p>Use o botão abaixo para voltar ao PIX e enviar o pedido diretamente.</p>
-          <button class="btn btn-wpp" id="enviarWpp"
-                  style="width:100%;justify-content:center;padding:16px;font-size:1rem">
-            📲 Enviar no WhatsApp
-          </button>
+          <button class="btn btn-wpp" id="enviarWpp">📲 Enviar pedido no WhatsApp</button>
         </div>
       </div>
     </div>

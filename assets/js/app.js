@@ -310,7 +310,7 @@ $("voltarCarrinho").onclick = () => {
 
 function mostrarEtapa(n){
   etapaAtual = n;
-  [1,2,3].forEach(i => {
+  [1,2].forEach(i => {
     $("etapa"+i).classList.toggle("ativa", i===n);
     $("dot"+i).classList.toggle("ativo", i<=n);
   });
@@ -329,13 +329,15 @@ document.querySelectorAll(".opcao-ent").forEach(op => {
 });
 
 $("irEtapa2").onclick = () => {
-  if(!$("cliNome").value.trim()){
+  const nome = $("cliNome").value.trim();
+  const telefone = $("cliTel").value.replace(/\D/g, "");
+  if(nome.length < 2){
     toast("⚠️ Por favor, informe seu nome.");
     $("cliNome").focus();
     return;
   }
-  if(!$("cliTel").value.trim()){
-    toast("⚠️ Por favor, informe seu telefone.");
+  if(telefone.length < 10 || telefone.length > 11){
+    toast("⚠️ Informe um telefone válido com DDD.");
     $("cliTel").focus();
     return;
   }
@@ -417,8 +419,6 @@ $("copiarPix").onclick = () => {
   );
 };
 
-$("irEtapa3").onclick = () => $("enviarWpp").click();
-
 let comprovantePix = null;
 
 function limparComprovante(){
@@ -428,7 +428,8 @@ function limparComprovante(){
   $("comprovanteImagem").hidden = true;
   $("comprovanteImagem").removeAttribute("src");
   $("comprovanteNome").textContent = "";
-  $("comprovanteAviso").classList.remove("aviso-erro");
+  const aviso = $("comprovanteAviso");
+  if(aviso) aviso.classList.remove("aviso-erro");
 }
 
 $("comprovantePix").addEventListener("change", () => {
