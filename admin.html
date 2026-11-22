@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Administração | Lunna Caseirinhos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-page">
+  <main class="admin-shell">
+    <header class="admin-top">
+      <a class="logo" href="index.html"><span aria-hidden="true">🎂</span><span>Lunna <b>Admin</b></span></a>
+      <a class="btn btn-ghost" href="index.html">← Ver loja</a>
+    </header>
+
+    <section class="admin-intro">
+      <div class="kicker">Painel administrativo</div>
+      <h1>Gerencie sua loja</h1>
+      <p>Atualize o banner e os produtos da loja neste navegador.</p>
+    </section>
+
+    <div class="admin-notice visible info" role="note">
+      As alterações ficam salvas apenas neste navegador e não são publicadas para outros clientes.
+    </div>
+    <div class="admin-notice" id="adminNotice" role="status" aria-live="polite"></div>
+
+    <div id="adminWorkspace">
+      <div class="admin-toolbar">
+        <span>Salvo neste navegador</span>
+        <button class="btn btn-ghost" id="resetLocalDataButton" type="button">Restaurar conteúdo inicial</button>
+      </div>
+
+      <section class="admin-card">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Dados da loja e pagamento</h2>
+            <p>Altere o contato, a chave PIX e as opções de entrega.</p>
+          </div>
+        </div>
+        <form id="storeDetailsForm" class="admin-form">
+          <label for="storeNameInput">Nome da loja</label>
+          <input id="storeNameInput" type="text" maxlength="100" required>
+          <label for="storeWhatsappInput">WhatsApp com DDI e DDD (somente números)</label>
+          <input id="storeWhatsappInput" type="tel" inputmode="numeric" pattern="[0-9]+" required>
+          <label for="storeEmailInput">E-mail de contato</label>
+          <input id="storeEmailInput" type="email" required>
+          <label for="storeHoursInput">Horário de atendimento</label>
+          <input id="storeHoursInput" type="text" maxlength="100" required>
+          <label for="storePixKeyInput">Chave PIX</label>
+          <input id="storePixKeyInput" type="text" maxlength="100" required>
+          <label for="storePixNameInput">Nome do titular do PIX</label>
+          <input id="storePixNameInput" type="text" maxlength="100" required>
+          <label for="storePixCityInput">Cidade do titular do PIX</label>
+          <input id="storePixCityInput" type="text" maxlength="50" required>
+          <label for="storeDeliveryFeeInput">Taxa de entrega (R$)</label>
+          <input id="storeDeliveryFeeInput" type="number" min="0" step="0.01" required>
+          <label for="storePixDiscountInput">Desconto no PIX (%)</label>
+          <input id="storePixDiscountInput" type="number" min="0" max="100" step="0.01" required>
+          <label for="storeAddressInput">Endereço da loja</label>
+          <textarea id="storeAddressInput" rows="2" maxlength="300"></textarea>
+          <label for="storeMapUrlInput">Link do mapa (opcional)</label>
+          <input id="storeMapUrlInput" type="url" placeholder="https://...">
+          <button class="btn btn-primary" type="submit">Salvar dados da loja</button>
+        </form>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Banner da página inicial</h2>
+            <p>Edite os textos e a foto principal ou oculte a imagem/banner.</p>
+          </div>
+        </div>
+        <form id="settingsForm" class="admin-form">
+          <div class="check-row">
+            <input id="heroVisible" type="checkbox">
+            <label for="heroVisible">Mostrar a seção de destaque</label>
+          </div>
+          <div class="check-row">
+            <input id="heroImageVisible" type="checkbox">
+            <label for="heroImageVisible">Mostrar a foto do bolo</label>
+          </div>
+          <label for="heroTitleInput">Texto antes do destaque</label>
+          <input id="heroTitleInput" type="text" maxlength="100" required>
+          <label for="heroEmphasisInput">Palavra em destaque</label>
+          <input id="heroEmphasisInput" type="text" maxlength="60" required>
+          <label for="heroEndingInput">Texto depois do destaque</label>
+          <input id="heroEndingInput" type="text" maxlength="100">
+          <label for="heroSubtitleInput">Texto de apresentação</label>
+          <textarea id="heroSubtitleInput" rows="3" maxlength="500" required></textarea>
+          <label for="heroImageUrlInput">URL da foto principal (opcional)</label>
+          <input id="heroImageUrlInput" type="url" placeholder="https://...">
+          <button class="btn btn-ghost" id="clearHeroImageButton" type="button">Remover foto atual</button>
+          <label for="heroImageFile">Enviar nova foto (máximo 512 KB)</label>
+          <input id="heroImageFile" type="file" accept="image/*">
+          <div class="image-preview-wrap" id="heroPreviewWrap" hidden>
+            <img id="heroPreview" alt="Prévia da foto do banner">
+          </div>
+          <button class="btn btn-primary" type="submit">Salvar banner</button>
+        </form>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Produtos do cardápio</h2>
+            <p>Edite preços, descrições e fotos, ou oculte produtos sem apagá-los.</p>
+          </div>
+          <button class="btn btn-primary" id="newProductButton" type="button">+ Novo produto</button>
+        </div>
+        <div id="productList" class="admin-product-list"></div>
+      </section>
+
+      <section class="admin-card" id="productEditor" hidden>
+        <div class="admin-section-heading">
+          <div>
+            <h2 id="productEditorTitle">Novo produto</h2>
+            <p>Preencha os dados e salve para atualizar o cardápio público.</p>
+          </div>
+          <button class="icon-button" id="cancelProductEdit" type="button" aria-label="Fechar edição">✕</button>
+        </div>
+        <form id="productForm" class="admin-form">
+          <input id="productId" type="hidden">
+          <label for="productName">Nome</label>
+          <input id="productName" type="text" maxlength="100" required>
+          <label for="productCategory">Categoria</label>
+          <select id="productCategory" required></select>
+          <label for="productEmoji">Emoji de reserva</label>
+          <input id="productEmoji" type="text" maxlength="8" value="🍰" required>
+          <label for="productDescription">Descrição</label>
+          <textarea id="productDescription" rows="3" maxlength="500" required></textarea>
+          <label for="productTag">Selo (opcional)</label>
+          <input id="productTag" type="text" maxlength="30" placeholder="Mais pedido, Premium...">
+          <label for="productImageUrl">URL da foto (opcional)</label>
+          <input id="productImageUrl" type="url" placeholder="https://...">
+          <button class="btn btn-ghost" id="clearProductImageButton" type="button">Remover foto atual</button>
+          <label for="productImageFile">Enviar nova foto (máximo 512 KB)</label>
+          <input id="productImageFile" type="file" accept="image/*">
+          <div class="image-preview-wrap" id="productPreviewWrap" hidden>
+            <img id="productPreview" alt="Prévia da foto do produto">
+          </div>
+          <label for="productPrice">Preço unitário (R$), para produto sem tamanhos</label>
+          <input id="productPrice" type="number" min="0.01" step="0.01">
+          <label for="productSizes">Tamanhos (uma opção por linha: tamanho | preço | rendimento)</label>
+          <textarea id="productSizes" rows="4" placeholder="P | 89,90 | ~10 fatias&#10;M | 139,90 | ~20 fatias"></textarea>
+          <div class="form-actions">
+            <button class="btn btn-ghost" id="cancelProductButton" type="button">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Salvar produto</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/catalog.js" defer></script>
+  <script src="assets/js/admin.js" defer></script>
+</body>
+</html>

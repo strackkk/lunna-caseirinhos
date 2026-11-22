@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lunna Caseirinhos - Bolos e Doces | Encomendas artesanais</title>
+<meta name="description" content="Bolos artesanais, docinhos e kits de festa sob encomenda. Peça online, pague via PIX e receba em casa.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Lunna Caseirinhos - Bolos e Doces">
+<meta property="og:description" content="Bolos artesanais, docinhos e kits de festa sob encomenda. Peça online, pague via PIX e receba em casa.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seudominio.com.br/">
+<meta property="og:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80">
+<meta name="theme-color" content="#C2185B">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header id="header">
+  <div class="container nav">
+    <a href="#inicio" class="logo">
+      <span class="emoji" aria-hidden="true">🎂</span>
+      <span id="storeHeaderName">Lunna <b>Caseirinhos</b></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#cardapio">Cardápio</a></li>
+      <li><a href="#como-funciona">Como Pedir</a></li>
+      <li><a href="#depoimentos">Avaliações</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#cardapio" class="btn btn-primary">Fazer Pedido</a>
+      <button class="cart-btn" id="cartBtn" aria-label="Abrir carrinho">
+        🛒<span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu de navegação">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-tag">✨ Feito à mão, com amor e ingredientes selecionados</div>
+      <h1><span id="heroTitle">Bolos que tornam</span> <em id="heroEmphasis">momentos</em> <span id="heroEnding">inesquecíveis</span></h1>
+      <p id="heroSubtitle">Encomende seu bolo artesanal online em poucos cliques. Escolha o sabor, o tamanho, pague via PIX e receba em casa — ou retire na loja. Doceria de verdade, com aquele sabor de feito em casa.</p>
+      <div class="hero-ctas">
+        <a href="#cardapio" class="btn btn-primary">🧁 Ver Cardápio</a>
+        <a href="#como-funciona" class="btn btn-ghost">Como funciona</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>+1.200</b><span>Festas atendidas</span></div>
+        <div class="stat"><b>4.9★</b><span>Avaliação média</span></div>
+        <div class="stat"><b>48h</b><span>Prazo de encomenda</span></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap" id="heroImageWrap">
+      <img class="hero-img" id="heroImage"
+           src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80"
+           loading="lazy"
+           alt="Bolo artesanal de chocolate"
+           onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#F8BBD0,#F48FB1,#FFE0B2)';this.parentElement.innerHTML='<div style=&quot;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8rem&quot;>🎂</div>'">
+      <div class="hero-badge b1">
+        <div class="ico">🚚</div>
+        <div><b>Entrega em casa</b><span>Em até 48h</span></div>
+      </div>
+      <div class="hero-badge b2">
+        <div class="ico">💳</div>
+        <div><b>Pague via PIX</b><span>Comprovante automático</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARDÁPIO ============ -->
+<section id="cardapio">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Nosso Cardápio</div>
+      <h2>Escolha sua doçura</h2>
+      <p>Bolos, docinhos, tortas e kits completos para sua festa. Todos feitos sob encomenda com ingredientes de primeira.</p>
+    </div>
+    <div class="filtros" id="filtros"></div>
+    <div class="produtos" id="produtos"></div>
+  </div>
+</section>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section id="como-funciona" style="background:var(--creme-2)">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Simples e Rápido</div>
+      <h2>Como pedir em 4 passos</h2>
+    </div>
+    <div class="passos">
+      <div class="passo">
+        <div class="num">1</div>
+        <div class="ico">🛍️</div>
+        <h3>Monte seu pedido</h3>
+        <p>Escolha os produtos, sabores e tamanhos no cardápio e adicione ao carrinho.</p>
+      </div>
+      <div class="passo">
+        <div class="num">2</div>
+        <div class="ico">📝</div>
+        <h3>Informe seus dados</h3>
+        <p>Diga seu nome, telefone e se prefere entrega ou retirada na loja.</p>
+      </div>
+      <div class="passo">
+        <div class="num">3</div>
+        <div class="ico">💸</div>
+        <h3>Pague via PIX</h3>
+        <p>Escaneie o QR Code ou copie a chave PIX e efetue o pagamento na hora.</p>
+      </div>
+      <div class="passo">
+        <div class="num">4</div>
+        <div class="ico">📲</div>
+        <h3>Envie o comprovante</h3>
+        <p>Toque no botão e envie o comprovante direto para nosso WhatsApp. Pedido confirmado!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEPOIMENTOS ============ -->
+<section class="depoimentos" id="depoimentos">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker" style="color:var(--dourado)">Quem provou, amou</div>
+      <h2>Avaliações de nossos clientes</h2>
+    </div>
+    <div class="dep-grid">
+      <div class="dep">
+        <div class="estrelas">★★★★★</div>
+        <p>"O bolo de Ninho com Nutella foi o destaque do aniversário do meu filho. Molhadinho, saboroso e a entrega foi pontual. Recomendo demais!"</p>
+        <div class="autor">
+          <div class="avatar">MC</div>
+          <div>
+            <b>Mariana Costa</b>
+            <span>Aniversário infantil</span>
+          </div>
+        </div>
+      </div>
+      <div class="dep">
+        <div class="estrelas">★★★★★</div>
+        <p>"Pedimos o kit festa para 50 pessoas e foi um sucesso. Os docinhos são maravilhosos, parecem de confeitaria famosa. O pagamento por PIX facilitou muito!"</p>
+        <div class="autor">
+          <div class="avatar">RS</div>
+          <div>
+            <b>Rafael Souza</b>
+            <span>Confraternização</span>
+          </div>
+        </div>
+      </div>
+      <div class="dep">
+        <div class="estrelas">★★★★★</div>
+        <p>"Já encomendei três vezes e sempre supera as expectativas. O Red Velvet é o melhor que já provei. Atendimento no WhatsApp nota 10."</p>
+        <div class="autor">
+          <div class="avatar">JL</div>
+          <div>
+            <b>Juliana Lima</b>
+            <span>Cliente fiel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RODAPÉ ============ -->
+<footer id="contato">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">🎂 <span id="storeFooterName">Lunna Caseirinhos</span></div>
+        <p style="font-size:.88rem">Bolos e doces artesanais para festas e ocasiões especiais. Feito com amor, entregue com carinho.</p>
+      </div>
+      <div>
+        <h4>Cardápio</h4>
+        <ul>
+          <li><a href="#cardapio">Bolos de Aniversário</a></li>
+          <li><a href="#cardapio">Bolos no Pote</a></li>
+          <li><a href="#cardapio">Docinhos & Brigadeiros</a></li>
+          <li><a href="#cardapio">Tortas & Cheesecakes</a></li>
+          <li><a href="#cardapio">Kits Festa</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li><a id="storeWhatsappLink" href="https://wa.me/5562992957741" target="_blank" rel="noopener" aria-label="Abrir WhatsApp da loja">📱 WhatsApp: (62) 99295-7741</a></li>
+          <li>✉️ <a id="storeEmailLink" href="mailto:contato@lunnacaseirinhos.com.br">contato@lunnacaseirinhos.com.br</a></li>
+          <li><a id="storeMapLink" href="https://maps.app.goo.gl/DiMESyobbbc5EbVH8" target="_blank" rel="noopener" aria-label="Abrir endereço da loja no Google Maps">📍 <span id="storeAddressText">R. Tamboril, qd 05 - lt 02 - Res. Caraibas, Aparecida de Goiânia - GO, 74846-880</span></a></li>
+          <li>🕐 <span id="storeHoursText">Ter–Dom: 9h às 19h</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Formas de Pagamento</h4>
+        <ul>
+          <li>💠 PIX (com desconto)</li>
+          <li>💳 Cartão de crédito</li>
+          <li>💵 Dinheiro na retirada</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom" id="storeCopyright">
+      © 2026 Lunna Caseirinhos - Bolos e Doces — Todos os direitos reservados. Feito com 💗 e muito carinho.
+    </div>
+  </div>
+</footer>
+
+<!-- ============ WHATSAPP FLUTUANTE ============ -->
+<a class="wpp-float" id="wppFloat" href="#" target="_blank" rel="noopener">
+  <span class="tooltip">Precisa de ajuda? Chame no WhatsApp!</span>
+  <svg viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M16 .8C7.6.8.8 7.6.8 16c0 2.7.7 5.3 2 7.6L.8 31.2l7.8-2c2.2 1.2 4.7 1.9 7.4 1.9 8.4 0 15.2-6.8 15.2-15.2S24.4.8 16 .8zm0 27.7c-2.4 0-4.7-.6-6.7-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5c-1.3-2-2-4.4-2-6.8C3.1 8.9 8.9 3.1 16 3.1s12.9 5.8 12.9 12.9-5.8 12.5-12.9 12.5zm7.1-9.7c-.4-.2-2.3-1.1-2.6-1.3-.4-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7-.1-.2-.9-2.1-1.2-2.9-.3-.8-.6-.7-.9-.7h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.4s1.5 3.9 1.7 4.2c.2.3 2.9 4.4 7 6.2 1 .4 1.8.7 2.4.9 1 .3 1.9.3 2.6.2.8-.1 2.3-1 2.7-1.9.3-.9.3-1.7.2-1.9-.1-.2-.3-.3-.7-.5z"/>
+  </svg>
+</a>
+
+<!-- ============ CARRINHO (DRAWER) ============ -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+  <div class="cart-head">
+    <h3 id="cartTitle">🛒 Seu Carrinho</h3>
+    <button class="cart-close" id="cartClose" aria-label="Fechar carrinho">✕</button>
+  </div>
+  <div class="cart-itens" id="cartItens"></div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-linha"><span>Subtotal</span><b id="subtotal">R$ 0,00</b></div>
+    <div class="cart-linha"><span>Entrega</span><b id="taxaEntrega">Calculada no checkout</b></div>
+    <div class="cart-linha total"><span>Total</span><b id="totalCart">R$ 0,00</b></div>
+    <button class="btn btn-primary checkout-btn" id="checkoutBtn">Finalizar Pedido →</button>
+  </div>
+</aside>
+
+<!-- ============ MODAL CHECKOUT ============ -->
+<div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="checkoutTitle">Finalizar Pedido</h3>
+      <button class="close" id="modalClose" aria-label="Fechar checkout">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="etapa-indicador">
+        <div class="etapa-dot ativo" id="dot1"></div>
+        <div class="etapa-dot" id="dot2"></div>
+        <div class="etapa-dot" id="dot3"></div>
+      </div>
+
+      <!-- ETAPA 1: Dados -->
+      <div class="etapa ativa" id="etapa1">
+        <h4>👤 Seus dados</h4>
+        <div class="campo">
+          <label for="cliNome">Nome completo *</label>
+          <input type="text" id="cliNome" placeholder="Seu nome">
+        </div>
+        <div class="campo">
+          <label for="cliTel">Telefone / WhatsApp *</label>
+          <input type="tel" id="cliTel" placeholder="(11) 99999-9999">
+        </div>
+        <div class="campo">
+          <label for="cliData">Data do evento / retirada</label>
+          <input type="date" id="cliData">
+        </div>
+        <h4 style="margin-top:20px">📦 Entrega ou retirada?</h4>
+        <div class="opcoes-entrega">
+          <div class="opcao-ent ativo" data-tipo="retirada">
+            <div class="ico">🏪</div>
+            <b>Retirar na loja</b>
+            <span>Grátis</span>
+          </div>
+          <div class="opcao-ent" data-tipo="entrega">
+            <div class="ico">🚚</div>
+            <b>Entregar em casa</b>
+            <span id="taxaLabel">+ R$ 15,00</span>
+          </div>
+        </div>
+        <div class="campo" id="campoEndereco" style="display:none">
+          <label for="cliEndereco">Endereço completo *</label>
+          <textarea id="cliEndereco" rows="2" placeholder="Rua, número, bairro, complemento, CEP"></textarea>
+        </div>
+        <div class="campo">
+          <label for="cliObs">Observações (sabor da decoração, velas, etc.)</label>
+          <textarea id="cliObs" rows="2" placeholder="Ex: escrever 'Parabéns, Maria!' no topo"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="voltarCarrinho">← Carrinho</button>
+          <button class="btn btn-primary" id="irEtapa2">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- ETAPA 2: Pagamento PIX -->
+      <div class="etapa" id="etapa2">
+        <h4>💠 Pagamento via PIX</h4>
+        <div class="resumo-pedido" id="resumoPedido"></div>
+        <div class="pix-box">
+          <div class="valor-pix" id="valorPix">R$ 0,00</div>
+          <div style="font-size:.8rem;color:var(--cinza);margin-bottom:12px">
+            Escaneie o QR Code com o app do seu banco
+          </div>
+          <div class="qr">
+            <img id="qrPix" loading="lazy" alt="QR Code PIX">
+          </div>
+          <div class="pix-status" id="pixStatus" role="status" aria-live="polite"></div>
+          <div style="font-size:.8rem;color:var(--cinza);margin:10px 0 6px">
+            Ou copie a chave PIX:
+          </div>
+          <div class="pix-chave">
+            <input type="text" id="pixChave" readonly>
+            <button class="copiar-btn" id="copiarPix">Copiar</button>
+          </div>
+        </div>
+        <div class="aviso">
+          ⚠️ Após pagar, clique em "Já paguei" e envie o comprovante pelo WhatsApp. Seu pedido só é confirmado após o envio do comprovante. Prazo mínimo de encomenda: 48h.
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="voltarEtapa1">← Voltar</button>
+          <button class="btn btn-wpp" id="irEtapa3">✓ Já paguei, enviar comprovante</button>
+        </div>
+      </div>
+
+      <!-- ETAPA 3: Envio comprovante -->
+      <div class="etapa" id="etapa3">
+        <div class="sucesso-box">
+          <div class="ico">🎉</div>
+          <h4>Quase lá! Envie seu comprovante</h4>
+          <p>
+            Toque no botão abaixo para abrir nosso WhatsApp com seu pedido e nome já preenchidos.
+            Lá dentro, é só <b>anexar a imagem do comprovante do PIX</b> e enviar. Confirmamos seu pedido em minutos!
+          </p>
+          <button class="btn btn-wpp" id="enviarWpp"
+                  style="width:100%;justify-content:center;padding:16px;font-size:1rem">
+            📲 Enviar comprovante no WhatsApp
+          </button>
+          <button class="btn btn-ghost" id="fecharModal"
+                  style="width:100%;justify-content:center;margin-top:10px">
+            Continuar comprando
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/catalog.js" defer></script>
+<script src="assets/js/pix.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>

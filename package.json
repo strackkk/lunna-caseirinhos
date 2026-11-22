@@ -1,0 +1,11 @@
+{
+  "name": "lunna-caseirinhos",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve ."
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0"
+  }
+}
