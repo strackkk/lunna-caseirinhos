@@ -190,11 +190,12 @@ function updateOverview(){
   }catch{
     orders = [];
   }
-  const soldCount = orders.reduce((sum, order) =>
+  const confirmedOrders = orders.filter(order => order.status === "confirmado");
+  const soldCount = confirmedOrders.reduce((sum, order) =>
     sum + (Array.isArray(order.items)
       ? order.items.reduce((itemSum, item) => itemSum + Number(item.quantity || 0), 0)
       : 0), 0);
-  const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const revenue = confirmedOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
   if(admin$("adminProductCount")) admin$("adminProductCount").textContent = adminProducts.length;
   if(admin$("adminActiveCount")) admin$("adminActiveCount").textContent = activeCount;
   if(admin$("adminCategoryCount")) admin$("adminCategoryCount").textContent =
@@ -480,6 +481,154 @@ async function deleteProduct(product){
   }catch(error){
     showNotice("Não foi possível excluir o produto: " + error.message, "error");
   }
+
+  function getLocalOrders(){
+    try{
+      const orders = readLocalValue("lunna-local-orders-v1", []);
+      return Array.isArray(orders) ? orders : [];
+    }catch{
+      return [];
+    }
+  }
+
+  function formatAdminDate(value){
+    if(!value) return "Data não informada";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
+  }
+
+  function renderOrders(){
+    const list = admin$("orderList");
+    if(!list) return;
+    list.replaceChildren();
+    const search = (admin$("orderSearch")?.value || "").trim().toLowerCase();
+    const status = admin$("orderStatusFilter")?.value || "todos";
+    const filtered = getLocalOrders().filter(order => {
+      const matchesStatus = status === "todos" || order.status === status;
+      const matchesSearch = !search ||
+        String(order.id || "").toLowerCase().includes(search) ||
+        String(order.customerName || "").toLowerCase().includes(search) ||
+        String(order.phone || "").toLowerCase().includes(search);
+      return matchesStatus && matchesSearch;
+    });
+
+    if(!filtered.length){
+      const empty = document.createElement("p");
+      empty.className = "admin-empty";
+      empty.textContent = "Nenhum pedido encontrado.";
+      list.append(empty);
+      return;
+    }
+
+    filtered.forEach(order => {
+      const card = document.createElement("article");
+      card.className = "admin-order";
+      const head = document.createElement("div");
+      head.className = "admin-order-head";
+      const title = document.createElement("h3");
+      title.textContent = `${order.id} · ${order.customerName || "Cliente"}`;
+      const badge = document.createElement("span");
+      badge.className = "admin-order-status " + (order.status || "pendente");
+      badge.textContent = order.status || "pendente";
+      head.append(title, badge);
+
+      const meta = document.createElement("div");
+      meta.className = "admin-order-meta";
+      [
+        `Telefone: ${order.phone || "-"}`,
+        `Recebido: ${formatAdminDate(order.createdAt)}`,
+        `Entrega: ${order.deliveryType === "entrega" ? "Entrega em casa" : "Retirada"}`,
+        `Evento: ${order.eventDate ? order.eventDate.split("-").reverse().join("/") : "-"}`,
+      ].forEach(text => {
+        const item = document.createElement("span");
+        item.textContent = text;
+        meta.append(item);
+      });
+
+      const items = document.createElement("div");
+      items.className = "admin-order-items";
+      items.textContent = (order.items || []).map(item =>
+        `${item.quantity}x ${item.name}${item.size ? " (" + item.size + ")" : ""}`
+      ).join(" · ");
+
+      const total = document.createElement("div");
+      total.className = "admin-order-total";
+      const value = document.createElement("strong");
+      value.textContent = "R$ " + Number(order.total || 0).toFixed(2).replace(".", ",");
+      const actions = document.createElement("div");
+      actions.className = "admin-order-actions";
+      if(order.status !== "confirmado"){
+        const confirm = document.createElement("button");
+        confirm.type = "button";
+        confirm.className = "confirm-order";
+        confirm.textContent = "Confirmar venda";
+        confirm.addEventListener("click", () => setOrderStatus(order.id, "confirmado"));
+        actions.append(confirm);
+      }
+      if(order.status !== "cancelado"){
+        const cancel = document.createElement("button");
+        cancel.type = "button";
+        cancel.className = "cancel-order";
+        cancel.textContent = "Cancelar";
+        cancel.addEventListener("click", () => setOrderStatus(order.id, "cancelado"));
+        actions.append(cancel);
+      }
+      total.append(value, actions);
+      card.append(head, meta, items, total);
+      list.append(card);
+    });
+  }
+
+  function setOrderStatus(orderId, status){
+    const orders = getLocalOrders();
+    const order = orders.find(item => item.id === orderId);
+    if(!order) return;
+    const previousStatus = order.status;
+    order.status = status;
+    saveLocalValue("lunna-local-orders-v1", orders);
+
+    if(previousStatus !== "cancelado" && status === "cancelado"){
+      restoreOrderStock(order);
+    }
+    if(previousStatus === "cancelado" && status === "confirmado"){
+      deductOrderStock(order);
+    }
+    renderOrders();
+    updateOverview();
+    showNotice(status === "confirmado"
+      ? "Venda confirmada e registrada."
+      : "Pedido cancelado.", status === "confirmado" ? "success" : "error");
+  }
+
+  function restoreOrderStock(order){
+    const saved = readLocalValue(LOCAL_PRODUCTS_KEY, null);
+    if(!Array.isArray(saved)) return;
+    const updated = saved.map(product => {
+      const quantity = (order.items || []).filter(item => item.productId == product.id)
+        .reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      return quantity && product.stock != null
+        ? {...product, stock: Number(product.stock) + quantity}
+        : product;
+    });
+    saveLocalValue(LOCAL_PRODUCTS_KEY, updated);
+    adminProducts = updated.map(mapProduct);
+    renderProducts();
+  }
+
+  function deductOrderStock(order){
+    const saved = readLocalValue(LOCAL_PRODUCTS_KEY, null);
+    if(!Array.isArray(saved)) return;
+    const updated = saved.map(product => {
+      const quantity = (order.items || []).filter(item => item.productId == product.id)
+        .reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      return quantity && product.stock != null
+        ? {...product, stock: Math.max(0, Number(product.stock) - quantity)}
+        : product;
+    });
+    saveLocalValue(LOCAL_PRODUCTS_KEY, updated);
+    adminProducts = updated.map(mapProduct);
+    renderProducts();
+  }
 }
 
 function bootAdmin(){
@@ -498,6 +647,12 @@ function bootAdmin(){
   }
   if(admin$("productStatusFilter")){
     admin$("productStatusFilter").addEventListener("change", renderProducts);
+  }
+  if(admin$("orderSearch")){
+    admin$("orderSearch").addEventListener("input", renderOrders);
+  }
+  if(admin$("orderStatusFilter")){
+    admin$("orderStatusFilter").addEventListener("change", renderOrders);
   }
   admin$("storeDetailsForm").addEventListener("submit", saveStoreDetails);
   admin$("settingsForm").addEventListener("submit", saveSettings);
@@ -546,6 +701,7 @@ function bootAdmin(){
   try{
     loadProducts();
     loadSettings();
+    renderOrders();
   }catch(error){
     showNotice("Não foi possível carregar os dados locais: " + error.message, "error");
   }

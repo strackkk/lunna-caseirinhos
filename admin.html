@@ -66,6 +66,7 @@
         <button type="button" class="admin-tab ativo" data-section="storeSection">Loja e PIX</button>
         <button type="button" class="admin-tab" data-section="bannerSection">Banner</button>
         <button type="button" class="admin-tab" data-section="productsSection">Produtos</button>
+        <button type="button" class="admin-tab" data-section="ordersSection">Pedidos</button>
       </nav>
 
       <section class="admin-card admin-section active" id="storeSection">
@@ -155,6 +156,25 @@
           </select>
         </div>
         <div id="productList" class="admin-product-list"></div>
+      </section>
+
+      <section class="admin-card admin-section" id="ordersSection">
+        <div class="admin-section-heading">
+          <div>
+            <h2>Pedidos recebidos</h2>
+            <p>Acompanhe pagamentos, entregas e confirme as vendas.</p>
+          </div>
+        </div>
+        <div class="admin-product-tools">
+          <input id="orderSearch" type="search" placeholder="Buscar pedido ou cliente..." aria-label="Buscar pedido">
+          <select id="orderStatusFilter" aria-label="Filtrar pedidos">
+            <option value="todos">Todos os pedidos</option>
+            <option value="pendente">Pendentes</option>
+            <option value="confirmado">Confirmados</option>
+            <option value="cancelado">Cancelados</option>
+          </select>
+        </div>
+        <div id="orderList" class="admin-order-list"></div>
       </section>
 
       <section class="admin-card" id="productEditor" hidden>
