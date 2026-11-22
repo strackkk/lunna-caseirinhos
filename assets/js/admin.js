@@ -107,15 +107,30 @@ function renderProducts(){
   const list = admin$("productList");
   list.replaceChildren();
 
-  if(!adminProducts.length){
+  const search = admin$("productSearch") ? admin$("productSearch").value.trim().toLowerCase() : "";
+  const status = admin$("productStatusFilter") ? admin$("productStatusFilter").value : "todos";
+  const filtered = adminProducts.filter(product => {
+    const matchesSearch = !search ||
+      String(product.name || "").toLowerCase().includes(search) ||
+      String(product.description || "").toLowerCase().includes(search);
+    const matchesStatus = status === "todos" ||
+      (status === "ativos" && product.is_active) ||
+      (status === "ocultos" && !product.is_active);
+    return matchesSearch && matchesStatus;
+  });
+
+  if(!filtered.length){
     const empty = document.createElement("p");
     empty.className = "admin-empty";
-    empty.textContent = "Nenhum produto cadastrado ainda.";
+    empty.textContent = adminProducts.length
+      ? "Nenhum produto corresponde aos filtros."
+      : "Nenhum produto cadastrado ainda.";
     list.append(empty);
+    updateOverview();
     return;
   }
 
-  adminProducts.forEach(product => {
+  filtered.forEach(product => {
     const row = document.createElement("article");
     row.className = "admin-product" + (product.is_active ? "" : " is-inactive");
     const image = product.image_url ? document.createElement("img") : document.createElement("div");
@@ -153,6 +168,15 @@ function renderProducts(){
     row.append(image, details, actions);
     list.append(row);
   });
+  updateOverview();
+}
+
+function updateOverview(){
+  const activeCount = adminProducts.filter(product => product.is_active).length;
+  if(admin$("adminProductCount")) admin$("adminProductCount").textContent = adminProducts.length;
+  if(admin$("adminActiveCount")) admin$("adminActiveCount").textContent = activeCount;
+  if(admin$("adminCategoryCount")) admin$("adminCategoryCount").textContent =
+    CATEGORIAS.filter(category => category.id !== "todos").length;
 }
 
 async function loadProducts(){
@@ -425,6 +449,21 @@ async function deleteProduct(product){
 
 function bootAdmin(){
   populateCategories();
+  document.querySelectorAll(".admin-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".admin-tab").forEach(item => item.classList.remove("ativo"));
+      document.querySelectorAll(".admin-section").forEach(section => section.classList.remove("active"));
+      tab.classList.add("ativo");
+      const section = admin(tab.dataset.section);
+      if(section) section.classList.add("active");
+    });
+  });
+  if(admin$("productSearch")){
+    admin$("productSearch").addEventListener("input", renderProducts);
+  }
+  if(admin$("productStatusFilter")){
+    admin$("productStatusFilter").addEventListener("change", renderProducts);
+  }
   admin$("storeDetailsForm").addEventListener("submit", saveStoreDetails);
   admin$("settingsForm").addEventListener("submit", saveSettings);
   admin$("productForm").addEventListener("submit", saveProduct);

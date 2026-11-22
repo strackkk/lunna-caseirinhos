@@ -25,17 +25,38 @@
     </section>
 
     <div class="admin-notice visible info" role="note">
-      As alterações ficam salvas apenas neste navegador e não são publicadas para outros clientes.
+      <strong>Modo local:</strong> as alterações ficam neste navegador e aparecem apenas aqui. Use o mesmo navegador para gerenciar a loja.
     </div>
     <div class="admin-notice" id="adminNotice" role="status" aria-live="polite"></div>
 
     <div id="adminWorkspace">
       <div class="admin-toolbar">
-        <span>Salvo neste navegador</span>
+        <span id="adminSaveStatus">✓ Tudo salvo neste navegador</span>
         <button class="btn btn-ghost" id="resetLocalDataButton" type="button">Restaurar conteúdo inicial</button>
       </div>
 
-      <section class="admin-card">
+      <section class="admin-overview" aria-label="Resumo da loja">
+        <article class="admin-stat">
+          <span class="admin-stat-icon">🍰</span>
+          <div><strong id="adminProductCount">0</strong><small>Produtos cadastrados</small></div>
+        </article>
+        <article class="admin-stat">
+          <span class="admin-stat-icon">✅</span>
+          <div><strong id="adminActiveCount">0</strong><small>Produtos publicados</small></div>
+        </article>
+        <article class="admin-stat">
+          <span class="admin-stat-icon">🏷️</span>
+          <div><strong id="adminCategoryCount">0</strong><small>Categorias disponíveis</small></div>
+        </article>
+      </section>
+
+      <nav class="admin-tabs" aria-label="Seções do painel">
+        <button type="button" class="admin-tab ativo" data-section="storeSection">Loja e PIX</button>
+        <button type="button" class="admin-tab" data-section="bannerSection">Banner</button>
+        <button type="button" class="admin-tab" data-section="productsSection">Produtos</button>
+      </nav>
+
+      <section class="admin-card admin-section active" id="storeSection">
         <div class="admin-section-heading">
           <div>
             <h2>Dados da loja e pagamento</h2>
@@ -69,7 +90,7 @@
         </form>
       </section>
 
-      <section class="admin-card">
+      <section class="admin-card admin-section" id="bannerSection">
         <div class="admin-section-heading">
           <div>
             <h2>Banner da página inicial</h2>
@@ -105,13 +126,21 @@
         </form>
       </section>
 
-      <section class="admin-card">
+      <section class="admin-card admin-section" id="productsSection">
         <div class="admin-section-heading">
           <div>
             <h2>Produtos do cardápio</h2>
             <p>Edite preços, descrições e fotos, ou oculte produtos sem apagá-los.</p>
           </div>
           <button class="btn btn-primary" id="newProductButton" type="button">+ Novo produto</button>
+        </div>
+        <div class="admin-product-tools">
+          <input id="productSearch" type="search" placeholder="Buscar produto..." aria-label="Buscar produto">
+          <select id="productStatusFilter" aria-label="Filtrar status">
+            <option value="todos">Todos os status</option>
+            <option value="ativos">Publicados</option>
+            <option value="ocultos">Ocultados</option>
+          </select>
         </div>
         <div id="productList" class="admin-product-list"></div>
       </section>
