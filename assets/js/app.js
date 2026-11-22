@@ -468,8 +468,16 @@ $("enviarWpp").onclick = async () => {
   const data = $("cliData").value;
   const obs = $("cliObs").value.trim();
   const endereco = $("cliEndereco").value.trim();
-  const {total} = calcularTotal();
-  let msg = `🛍️ *NOVO PEDIDO — ${CONFIG.nomeLoja}*\n\n`;
+  const {subtotal, taxa, total} = calcularTotal();
+  const pedidoId = `LC-${Date.now().toString().slice(-8)}`;
+  const now = new Date();
+  const enviadoEm = now.toLocaleString("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+  let msg = `🛍️ *NOVO PEDIDO — ${CONFIG.nomeLoja}*\n`;
+  msg += `🔔 *Pedido:* ${pedidoId}\n`;
+  msg += `🕒 *Enviado em:* ${enviadoEm}\n\n`;
   msg += `👤 *Cliente:* ${nome}\n`;
   msg += `📱 *Telefone:* ${tel}\n`;
   if(data) msg += `📅 *Data do evento:* ${data.split("-").reverse().join("/")}\n`;
@@ -479,7 +487,13 @@ $("enviarWpp").onclick = async () => {
   carrinho.forEach(i => {
     msg += `• ${i.qtd}x ${i.nome}${i.sizeLabel?' — '+i.sizeLabel:''} = ${fmt(i.preco*i.qtd)}\n`;
   });
-  msg += `\n💰 *TOTAL PAGO VIA PIX:* ${fmt(total)}\n`;
+  msg += `\n💰 *VALORES DO PEDIDO:*\n`;
+  msg += `• Subtotal: ${fmt(subtotal)}\n`;
+  msg += `• ${tipoEntrega==="entrega" ? "Entrega" : "Retirada"}: ${taxa > 0 ? fmt(taxa) : "Grátis"}\n`;
+  if(CONFIG.descontoPix > 0){
+    msg += `• Desconto PIX (${CONFIG.descontoPix}%): -${fmt(subtotal + taxa - total)}\n`;
+  }
+  msg += `• *Total via PIX: ${fmt(total)}*\n`;
   if(obs) msg += `\n📝 *Observações:* ${obs}\n`;
   msg += `\n📎 *Comprovante:* anexado junto a esta mensagem.\n\nAguardo confirmação! Obrigada 💗`;
 
