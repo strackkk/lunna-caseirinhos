@@ -638,7 +638,7 @@ function bootAdmin(){
       document.querySelectorAll(".admin-tab").forEach(item => item.classList.remove("ativo"));
       document.querySelectorAll(".admin-section").forEach(section => section.classList.remove("active"));
       tab.classList.add("ativo");
-      const section = admin(tab.dataset.section);
+      const section = admin$(tab.dataset.section);
       if(section) section.classList.add("active");
     });
   });
